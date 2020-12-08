@@ -1,12 +1,12 @@
-/**
- * @description Kullanıcı için şema
- * */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { SchemaTypes, Document } from 'mongoose';
 import { UserRoles } from './user.enums';
 import { isEmail } from 'class-validator';
 import { modelRefs } from '../model-referances';
 
+/**
+ * @description Kullanıcı için şema
+ * */
 @Schema({
   timestamps: {
     createdAt: true,
@@ -17,41 +17,49 @@ import { modelRefs } from '../model-referances';
 export class User {
   id?: string;
 
+  /**
+   * @description Ad
+   */
   @Prop({
     type: SchemaTypes.String,
     required: true,
-    minlength: 2,
-    maxlength: 32,
     lowercase: true,
   })
   firstName!: string;
 
+  /**
+   * @description Soyad
+   */
   @Prop({
     type: SchemaTypes.String,
     required: true,
-    minlength: 2,
-    maxlength: 32,
     lowercase: true,
   })
   lastName!: string;
 
+  /**
+   * @description Kullanıcı Rolü
+   */
   @Prop({
     type: SchemaTypes.String,
-    default: UserRoles.EMPLOYEE,
+    default: UserRoles.USER,
     enum: Object.keys(UserRoles),
   })
   role?: UserRoles;
 
+  /**
+   * @description Kullanıcı adı
+   */
   @Prop({
     type: SchemaTypes.String,
     required: true,
     unique: true,
-    minlength: 6,
-    maxlength: 32,
-    validate: /^[a-z0-9_]{6,32}$/,
   })
   username!: string;
 
+  /**
+   * @description Eposta adresi
+   */
   @Prop({
     type: SchemaTypes.String,
     required: false,
@@ -60,15 +68,20 @@ export class User {
   })
   email?: string;
 
+  /**
+   * @description Şifre Rolü
+   */
   @Prop({
     type: SchemaTypes.String,
     required: true,
-    minlength: 8,
-    maxlength: 32,
+    // Find query'lerinde password'ü seçmemesi için select: true
     select: false,
   })
   password!: string;
 
+  /**
+   * @description Aktiflik
+   */
   @Prop({
     type: SchemaTypes.Boolean,
     required: false,
@@ -76,17 +89,35 @@ export class User {
   })
   active?: boolean;
 
+  /**
+   * @description Oluşturulma Tarihi
+   */
   createdAt?: Date;
+
+  /**
+   * @description Güncelleme Tarihi
+   */
   updatedAt?: Date;
 }
 
 export type UserDocument = User &
   Document & {
+    /**
+     * @description Şifreyi döküman üzerinden hashleyebilmek için bir fonksiyon
+     */
     hashPassword?: (password: string) => Promise<string>;
+    /**
+     * @description Verilen şifre ile hash'i karşılaştıran fonksiyon
+     * @param candidatePassword aday
+     * @param hashedPassword hash'lenmiş şifre
+     */
     comparePasswords?: (
       candidatePassword: string,
       hashedPassword: string,
     ) => Promise<boolean>;
+    /**
+     * @description Şifre değiştirilmeden önce alınan bir token mi değil mi?
+     */
     changedPasswordAfter?: (JWTTimeStamp: string | number) => boolean;
   };
 export const UserSchema = SchemaFactory.createForClass(User);
