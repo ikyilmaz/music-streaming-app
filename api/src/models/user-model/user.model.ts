@@ -3,6 +3,7 @@ import { SchemaTypes, Document } from 'mongoose';
 import { UserRoles } from './user.enums';
 import { isEmail } from 'class-validator';
 import { modelRefs } from '../model-referances';
+import { ProfileSchema, ProfileSubdocument } from './profile.subdoc';
 
 /**
  * @description Kullanıcı için şema
@@ -57,6 +58,13 @@ export class User {
     required: false,
   })
   profilePhoto?: string;
+
+  @Prop({
+    type: ProfileSchema,
+    required: false,
+    default: {}, // ? TODO:
+  })
+  profile?: ProfileSubdocument;
 
   /**
    * @description Kullanıcı Rolü
@@ -119,9 +127,6 @@ export class User {
    * @description Güncelleme Tarihi
    */
   updatedAt?: Date;
-
-  // Sanal ilişkiler
-  profile?: Profile;
 }
 
 export type UserDocument = User &
@@ -148,4 +153,4 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 import './user.methods';
 import './user.hooks';
-import { Profile } from '../profile-model/profile.model';
+import './user.virtuals';
