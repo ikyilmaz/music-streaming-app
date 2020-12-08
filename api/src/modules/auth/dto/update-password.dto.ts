@@ -3,18 +3,33 @@ import { IsNotEmpty, Length } from 'class-validator';
 import { vldtMsg } from './../../../utils/validation-message';
 
 export class UpdatePasswordDto {
-	@ApiProperty({ required: true, description: 'Mecburi,\n Karakter uzunluğu 8 ve 32 olmalı' })
-	@Length(8, 32, { message: vldtMsg('between 8 and 32 characters') })
-	@IsNotEmpty({ message: vldtMsg('defined') })
-	currentPassword!: string;
+  @ApiProperty({
+    description: 'Kullanıcının şu anki şifresi',
+    required: true,
+    maxLength: 32,
+    minLength: 8,
+  })
+  @Length(8, 32, { message: vldtMsg('8 ve 32 karakter aralığında') })
+  @IsNotEmpty({ message: vldtMsg('belirtilmiş') })
+  currentPassword!: string;
 
-	@ApiProperty({ required: true, description: 'Mecburi,\n Karakter uzunluğu 8 ve 32 olmalı' })
-	@Length(8, 32, { message: vldtMsg('between 8 and 32 characters') })
-	@IsNotEmpty({ message: vldtMsg('defined') })
-	newPassword!: string;
+  @ApiProperty({
+    required: true,
+    description: 'Kullanıcının oluşturmak istediği yeni şifre',
+    maxLength: 32,
+    minLength: 8,
+  })
+  @Length(8, 32, { message: vldtMsg('8 ve 32 karakter aralığında') })
+  @IsNotEmpty({ message: vldtMsg('belirtilmiş') })
+  newPassword!: string;
 
-	@ApiProperty({ required: true, description: 'Mecburi,\n Karakter uzunluğu 8 ve 32 olmalı' })
-	@Length(8, 32, { message: vldtMsg('between 8 and 32 characters') })
-	@IsNotEmpty({ message: vldtMsg('defined') })
-	newPasswordConfirm!: string;
+  @ApiProperty({
+    required: true,
+    description: 'Yeni şifre tekrar',
+    maxLength: 32,
+    minLength: 8,
+  })
+  @Length(8, 32, { message: vldtMsg('8 ve 32 karakter aralığında') })
+  @IsNotEmpty({ message: vldtMsg('belirtilmiş') })
+  newPasswordConfirm!: string;
 }

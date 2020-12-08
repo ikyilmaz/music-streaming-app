@@ -18,6 +18,7 @@ import { SignUpDTO } from './dto/sign-up.dto';
 import { SignInDTO } from './dto/sign-in.dto';
 import {
   ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -52,6 +53,9 @@ export class AuthController {
   })
   @ApiCreatedResponse({ description: 'Başarılı' })
   @ApiBadRequestResponse({ description: 'Validasyon başarısız sonuçlanırsa' })
+  @ApiConflictResponse({
+    description: 'Herhangi eşsiz bir alan zaten kullanılıyorsa',
+  })
   @Post('/sign-up')
   async signUp(
     @Body() body: SignUpDTO,
@@ -159,6 +163,9 @@ export class AuthController {
   @ApiOperation({ summary: 'E-posta adresi güncelle' })
   @ApiOkResponse({ description: "Başarılı. Doğrulama e-posta'sı gönderildi" })
   @ApiBadRequestResponse({ description: 'Validasyon başarısız sonuçlanırsa' })
+  @ApiConflictResponse({
+    description: 'Herhangi eşsiz bir alan zaten kullanılıyorsa',
+  })
   @Auth()
   @Put('/update-email')
   async updateEmail() {
@@ -174,6 +181,9 @@ export class AuthController {
     description: 'Bilgileri güncellemek için kullanılan endpoint',
   })
   @ApiBadRequestResponse({ description: 'Validasyon başarısız sonuçlanırsa' })
+  @ApiConflictResponse({
+    description: 'Herhangi eşsiz bir alan zaten kullanılıyorsa',
+  })
   @Auth()
   @Put('/update-me')
   async updateMe(@Body() body: UpdateMeDto, @CurrentUser('id') id: string) {
@@ -197,7 +207,7 @@ export class AuthController {
   }
 
   /**
-   * @description jwt token oluşturur ve gönderir
+   * @description jwt token oluşturur ve token ile user'ı return eder
    */
   private async createToken(user: UserDocument, res: Response) {
     const token = await generateJWTToken(
