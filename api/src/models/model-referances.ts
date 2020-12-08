@@ -3,4 +3,5 @@
  */
 export const modelRefs = {
   user: 'User',
+  profile: 'Profile',
 };
