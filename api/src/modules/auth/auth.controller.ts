@@ -172,36 +172,6 @@ export class AuthController {
   }
 
   @ApiOperation({
-    summary: 'Profili getir',
-    description: 'Giriş yapmış olan kullanıcının profilini getirir',
-  })
-  @ApiOkResponse({
-    description: 'Başarılı',
-  })
-  @Auth()
-  @Get('/profile')
-  getProfile(@CurrentUser('id') id: string) {
-    return this.$authService.getProfile(id);
-  }
-
-  // TODO: Eklenecek !!
-  @ApiOperation({
-    summary: 'Profili getir',
-    description: 'Giriş yapmış olan kullanıcının profilini getirir',
-  })
-  @ApiOkResponse({
-    description: 'Başarılı',
-  })
-  @ApiBadRequestResponse({
-    description: 'Validasyon başarısız sonuçlanırsa',
-  })
-  @Auth()
-  @Put('/update-profile')
-  updateProfile() {
-    throw new NotImplementedException();
-  }
-
-  @ApiOperation({
     summary: 'Şu anki kullanıcı',
     description: 'Şu anki kullanıcıyı döner',
   })

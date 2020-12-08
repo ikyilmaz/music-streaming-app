@@ -3,7 +3,6 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../../models/user-model/user.model';
-import { Profile, ProfileSchema } from 'src/models/profile-model/profile.model';
 
 @Module({
   imports: [
@@ -11,11 +10,7 @@ import { Profile, ProfileSchema } from 'src/models/profile-model/profile.model';
       {
         name: User.name,
         schema: UserSchema,
-      },
-      {
-        name: Profile.name,
-        schema: ProfileSchema,
-      },
+      }
     ]),
   ],
   controllers: [AuthController],
