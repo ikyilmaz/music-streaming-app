@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  # MongoDB Veritabanı
+  mongo:
+    image: mongo
+    # Veritabanı için kullanıcı bilgileri şimdilik username ve password
+    environment:
+      # Kullanıcı adı
+      MONGO_INITDB_ROOT_USERNAME: username
+      # Şifre
+      MONGO_INITDB_ROOT_PASSWORD: password
+    # Veritabanına bağlanılacak olan port hem konteynır hem de yerel ağ için
+    ports:
+      - "27017:27017"
