@@ -1,15 +1,21 @@
-version: "3"
+version: '3'
 
 services:
   # MongoDB Veritabanı
   mongo:
+    # Mongo image
     image: mongo
-    # Veritabanı için kullanıcı bilgileri şimdilik username ve password
+    # Evrensel değişkenlerin bulunduğu dosya
+    env_file: .env
+    # Veritabanı evrensel değişkenler
     environment:
       # Kullanıcı adı
-      MONGO_INITDB_ROOT_USERNAME: username
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
       # Şifre
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      # Veritabanı adı
+      MONGO_INITDB_DATABASE: ${DATABASE_NAME}
     # Veritabanına bağlanılacak olan port hem konteynır hem de yerel ağ için
     ports:
-      - "27017:27017"
+      - '27017:27017'
+ 
