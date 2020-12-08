@@ -44,12 +44,9 @@ export class AuthController {
     private readonly $configService: ConfigService,
   ) {}
 
-  /**
-   *  @summary KAYIT OL
-   *  @statusCodes 200, 400 */
   @ApiOperation({
     summary: 'Kayıt ol',
-    description: 'Kayıt olmak için kullanılan endpoint',
+    description: 'Kayıt olmak için kullanılır',
   })
   @ApiCreatedResponse({ description: 'Başarılı' })
   @ApiBadRequestResponse({ description: 'Validasyon başarısız sonuçlanırsa' })
@@ -64,13 +61,9 @@ export class AuthController {
     return this.createToken(await this.$authService.create(body), res);
   }
 
-  /**
-   * 	@summary GİRİŞ YAP
-   *  @description verilen kriterlere göre kullanıcı girişi
-   *  @statusCodes 200, 401, 400 */
   @ApiOperation({
     summary: 'Giriş yap',
-    description: 'Giriş yapmak için kullanılan endpoint',
+    description: 'Giriş yapmak için kullanılır',
   })
   @ApiOkResponse({ description: 'Başarılı' })
   @ApiUnauthorizedResponse({
@@ -85,7 +78,7 @@ export class AuthController {
   ) {
     if (!body.username && !body.email)
       throw new BadRequestException(
-        'you must specify either username or email',
+        "ya 'username' ya da 'email' alanlarından biri bulunmalı",
       );
 
     const user = await this.$authService.get({
@@ -94,25 +87,17 @@ export class AuthController {
     });
 
     if (!user)
-      throw new UnauthorizedException(
-        'email, username or password is not correct',
-      );
+      throw new UnauthorizedException('email, username ya da password yanlış');
 
     if (!(await user.comparePasswords(body.password, user.password)))
-      throw new UnauthorizedException(
-        'email, username or password is not correct',
-      );
+      throw new UnauthorizedException('email, username ya da password yanlış');
 
     return this.createToken(user, res);
   }
 
-  /**
-   *  @summary ÇIKIŞ YAP
-   * 	@description Cookie'lerde bulunan jwt anahtar kelimesini kaldırır
-   *  @statusCodes 200 */
   @ApiOperation({
     summary: 'Çıkış yap',
-    description: 'Çıkış yapmak için kullanılan endpoint',
+    description: 'Çıkış yapmak için kullanılır',
   })
   @ApiOkResponse({ description: 'Başarılı' })
   @Get('/sign-out')
@@ -125,13 +110,9 @@ export class AuthController {
     return { status: 'success' };
   }
 
-  /**
-   *  @description Kullanıcının şifresini günceller
-   *  @permissions authenticated users
-   *  @statusCodes 200, 401, 400 */
   @ApiOperation({
     summary: 'Şifreyi güncelle',
-    description: 'Şifreyi güncellemek için kullanılan endpoint',
+    description: 'Giriş yapmış olan kullanıcının şifresini günceller',
   })
   @ApiOkResponse({ description: 'Başarılı' })
   @ApiBadRequestResponse({ description: 'Validasyon başarısız sonuçlanırsa' })
@@ -153,14 +134,15 @@ export class AuthController {
 
     user.password = body.newPassword;
     await user.save();
-    return { status: 'success' }; // TODO: Güzel döndür
+    return {};
   }
 
-  /**
-   *  @description Kullanıcının eposta adresini günceller ve doğrulama epostası gönderir
-   *  @permissions authenticated users
-   *  @statusCodes 200, 401, 400 */
-  @ApiOperation({ summary: 'E-posta adresi güncelle' })
+  // TODO: Eklenecek!!
+  @ApiOperation({
+    summary: 'E-posta adresi güncelle',
+    description:
+      'Giriş yapmış olan kullanıcının e-posta adresini günceller ve bir verifikasyon bağlantısı gönderir',
+  })
   @ApiOkResponse({ description: "Başarılı. Doğrulama e-posta'sı gönderildi" })
   @ApiBadRequestResponse({ description: 'Validasyon başarısız sonuçlanırsa' })
   @ApiConflictResponse({
@@ -172,13 +154,12 @@ export class AuthController {
     throw new NotImplementedException();
   }
 
-  /**
-   *  @description Kullanıcının diğer alanlarını günceller
-   *  @permissions authenticated users
-   *  @statusCodes 200, 401, 400 */
-  @ApiOperation({ summary: 'Bilgileri güncelle' })
+  @ApiOperation({
+    summary: 'Bilgileri güncelle',
+    description: 'Giriş yapmış olan kullanıcının bilgilerini günceller',
+  })
   @ApiOkResponse({
-    description: 'Bilgileri güncellemek için kullanılan endpoint',
+    description: 'Başarılı',
   })
   @ApiBadRequestResponse({ description: 'Validasyon başarısız sonuçlanırsa' })
   @ApiConflictResponse({
@@ -190,10 +171,36 @@ export class AuthController {
     this.$authService.update(id, body);
   }
 
-  /**
-   *  @description Şu anki kullanıcıyı döner
-   *  @permissions authenticated users
-   *  @statusCodes 200 */
+  @ApiOperation({
+    summary: 'Profili getir',
+    description: 'Giriş yapmış olan kullanıcının profilini getirir',
+  })
+  @ApiOkResponse({
+    description: 'Başarılı',
+  })
+  @Auth()
+  @Get('/profile')
+  getProfile(@CurrentUser('id') id: string) {
+    return this.$authService.getProfile(id);
+  }
+
+  // TODO: Eklenecek !!
+  @ApiOperation({
+    summary: 'Profili getir',
+    description: 'Giriş yapmış olan kullanıcının profilini getirir',
+  })
+  @ApiOkResponse({
+    description: 'Başarılı',
+  })
+  @ApiBadRequestResponse({
+    description: 'Validasyon başarısız sonuçlanırsa',
+  })
+  @Auth()
+  @Put('/update-profile')
+  updateProfile() {
+    throw new NotImplementedException();
+  }
+
   @ApiOperation({
     summary: 'Şu anki kullanıcı',
     description: 'Şu anki kullanıcıyı döner',
@@ -206,14 +213,11 @@ export class AuthController {
     return user;
   }
 
-  /**
-   * @description jwt token oluşturur ve token ile user'ı return eder
-   */
   private async createToken(user: UserDocument, res: Response) {
     const token = await generateJWTToken(
       user.id,
-      this.$configService.get('JWT_SECRET_KEY'),
-      this.$configService.get('JWT_EXPIRES_IN'),
+      this.$configService.get<string>('JWT_SECRET_KEY'),
+      this.$configService.get<string>('JWT_EXPIRES_IN'),
     );
 
     filterObject(user, ['password', 'passwordChangedAt']);
