@@ -12,9 +12,12 @@ import { modelRefs } from '../model-referances';
     createdAt: true,
     updatedAt: true,
   },
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
   collection: modelRefs.user,
 })
 export class User {
+  // CurrentUser dekoratörü için gerekli yoksa id yok diyor
   id?: string;
 
   /**
@@ -36,6 +39,24 @@ export class User {
     lowercase: true,
   })
   lastName!: string;
+
+  /**
+   * @description Yaş
+   */
+  @Prop({
+    type: SchemaTypes.Number,
+    required: false,
+  })
+  age?: number;
+
+  /**
+   * @description Profil Fotoğrafı
+   */
+  @Prop({
+    type: SchemaTypes.String,
+    required: false,
+  })
+  profilePhoto?: string;
 
   /**
    * @description Kullanıcı Rolü
@@ -98,6 +119,9 @@ export class User {
    * @description Güncelleme Tarihi
    */
   updatedAt?: Date;
+
+  // Sanal ilişkiler
+  profile?: Profile;
 }
 
 export type UserDocument = User &
@@ -124,3 +148,4 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 import './user.methods';
 import './user.hooks';
+import { Profile } from '../profile-model/profile.model';
