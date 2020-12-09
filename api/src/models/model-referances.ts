@@ -3,5 +3,6 @@
  */
 export const modelRefs = {
   user: 'User',
-  profile: 'Profile',
+  album: 'Album',
+  track: "Track"
 };
