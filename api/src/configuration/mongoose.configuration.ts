@@ -5,7 +5,7 @@ export const mongooseOptions = (
   configService: ConfigService,
 ): Promise<MongooseModuleOptions> | MongooseModuleOptions => {
   let uri = configService.get<string>('DATABASE_URL');
-
+ 
   uri = uri.replace(
     '<username>',
     configService.get<string>('DATABASE_USERNAME'),
@@ -18,7 +18,7 @@ export const mongooseOptions = (
  
   return {
     uri:
-      process.env.NODE_ENV === 'production' ? uri : 'mongodb://localhost:27017',
+      process.env.NODE_ENV === 'development' ? uri : 'mongodb://localhost:27017',
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
