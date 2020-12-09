@@ -1,5 +1,4 @@
-## Description
-Uygulamanın giriş dosyası src/main.ts'dir.
+## Açıklama
 
 ## Dosya düzeni
 - **src/main.ts** Uygulamanın **giriş dosyası** (entry point)

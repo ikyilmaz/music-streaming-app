@@ -4,7 +4,7 @@ Müzik dinleme platformu kaynak kodlarının bulunduğu repository
 
 # İçerik
 
-- ### RESTful API
+- ### RESTful API [Açıklama için tıklayınız](./api/README.md)
 
   - **Typescript** (TypeScript is a strongly typed, object oriented, compiled language)
   - **NestJS** (Backend Framework)
