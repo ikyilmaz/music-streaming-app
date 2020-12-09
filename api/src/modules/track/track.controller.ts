@@ -63,11 +63,13 @@ export class TrackController {
     return this.trackService.findOne(id);
   }
 
+  // FIXME: Eklenecek
   @Put(':id')
   update(@Param('id') id: string, @Body() body: UpdateTrackDto) {
     return this.trackService.update(+id, body);
   }
 
+  // FIXME: Eklenecek
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.trackService.remove(+id);

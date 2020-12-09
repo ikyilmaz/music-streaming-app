@@ -9,23 +9,23 @@ const logger: Logger = new Logger('Main');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Set interceptors
+  // Interceptor middleware
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
-  // Set global prefix
+  // Global prefix
   app.setGlobalPrefix(`api/${process.env.API_VERSION}`);
 
-  // Set pipes
+  // Validasyon için gerekli 
   app.useGlobalPipes(
     new ValidationPipe({ 
       whitelist: true,
     }),
   );
 
-  // Set up swagger
+  // Swaggerı yükle
   swaggerOptions(app);
 
-  // Listen on port 8080
+  // ve port 8080'de dinlemeye başla
   await app.listen(process.env.PORT || 8080);
 
   logger.log('Başarılı bir şekilde başlatıldı.');
