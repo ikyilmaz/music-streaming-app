@@ -2,29 +2,32 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { swaggerOptions } from './configuration/swagger.configuration';
+import { TransformResponseInterceptor } from './interceptors/transform-response.interceptor';
 
 const logger: Logger = new Logger('Main');
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-	// Set global prefix
-	app.setGlobalPrefix(`api/${process.env.API_VERSION}`);
+  // Set interceptors
+  app.useGlobalInterceptors(new TransformResponseInterceptor());
 
-	// Set pipes
-	app.useGlobalPipes(
-		new ValidationPipe({
-      // whitelist alanı body'deki istenmeyen alanları otomatik olarak siler
-			whitelist: true, 
-		}),
-	);
+  // Set global prefix
+  app.setGlobalPrefix(`api/${process.env.API_VERSION}`);
 
-	// Set up swagger
-	swaggerOptions(app);
+  // Set pipes
+  app.useGlobalPipes(
+    new ValidationPipe({ 
+      whitelist: true,
+    }),
+  );
 
-	// Listen on port 8080
-	await app.listen(process.env.PORT || 8080);
+  // Set up swagger
+  swaggerOptions(app);
 
-	logger.log('Başarılı bir şekilde başlatıldı.');
+  // Listen on port 8080
+  await app.listen(process.env.PORT || 8080);
+
+  logger.log('Başarılı bir şekilde başlatıldı.');
 }
 bootstrap();
