@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongooseOptions } from './configuration/mongoose.configuration';
 import { AuthModule } from './modules/auth/auth.module';
+import { AlbumModule } from './modules/album/album.module';
+import { TrackModule } from './modules/track/track.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     // Modüllerimizi ekleyelim
     AuthModule,
+    AlbumModule,
+    TrackModule,
   ],
   controllers: [],
   providers: [],
